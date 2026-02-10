@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 export default function Header() {
-  const navigationLinks = ["About", "Experience", "Projects"];
+  const navigationLinks = ["Education", "About", "Experience", "Projects"];
   const [isOpen, setIsOpen] = useState(false);
 
   return (

@@ -16,7 +16,7 @@ const Collapsible = React.forwardRef<HTMLDivElement, CollapsibleProps>(
         {header ? (
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="w-full flex items-center justify-between gap-2 text-white hover:text-teal-500 transition-colors py-2"
+            className="w-full flex items-center justify-between gap-2 text-white hover:text-teal-500 transition-colors py-2 border-b border-teal-700/30"
           >
             <span className="text-left">{header}</span>
             <ChevronDown

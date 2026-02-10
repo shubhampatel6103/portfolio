@@ -1,5 +1,6 @@
 import Header from "@/components/header";
 import HeroSection from "@/components/heroSection";
+import EducationSection from "@/components/educationSection";
 import AboutSection from "@/components/aboutSection";
 import ExperienceSection from "@/components/experienceSection";
 import ProjectsSection from "@/components/projectsSection";
@@ -12,6 +13,9 @@ export default function Home() {
       <Header />
       <div className="flex justify-center">
         <HeroSection />
+      </div>
+      <div className="flex justify-center">
+        <EducationSection />
       </div>
       <div className="flex justify-center">
         <AboutSection />

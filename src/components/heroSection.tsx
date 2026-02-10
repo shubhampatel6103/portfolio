@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Github, Linkedin, Mail } from "lucide-react";
+import TypingText from "@/components/typingText";
 
 interface SocialLink {
   href: string;
@@ -26,7 +27,7 @@ const socialLinks: SocialLink[] = [
   },
 ];
 
-const techStack = ["React", "TypeScript", "Next.js", "Tailwind CSS"];
+const roles = ["Software Engineer", "AI/ML Developer", "Finance Enthusiast", "Systems Architect", "Data Engineer", "Automation Developer"];
 
 export default function HeroSection() {
   return (
@@ -38,28 +39,18 @@ export default function HeroSection() {
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-white mb-4 tracking-tight">
               Shubham Patel
             </h1>
-            <h2 className="text-xl sm:text-2xl text-teal-500 font-medium">
-              Software Engineer
-            </h2>
+            <TypingText
+              words={roles}
+              className="text-xl sm:text-2xl text-teal-500 font-medium h-8"
+              speed={50}
+              delayBetweenWords={2000}
+            />
           </div>
 
           <p className="text-sm sm:text-base text-gray-400 leading-relaxed max-w-2xl">
-            I build accessible, pixel-perfect digital experiences for the web.
-            Currently focused on creating polished products that blend
-            thoughtful design with robust engineering.
+            I am a tech enthusiast with a passion for building accessible and
+            performant systems to address real-world problems.
           </p>
-
-          <div className="flex flex-wrap gap-2 pt-4">
-            {techStack.map((tech) => (
-              <Badge
-                key={tech}
-                variant="secondary"
-                className="text-xs font-normal"
-              >
-                {tech}
-              </Badge>
-            ))}
-          </div>
 
           {/* Social Links */}
           <div className="flex gap-6 mt-8 sm:mt-12">
