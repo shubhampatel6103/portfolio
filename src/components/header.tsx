@@ -19,7 +19,7 @@ export default function Header() {
               <a
                 key={link}
                 href={`#${link.toLowerCase()}`}
-                className="text-sm text-gray-400 hover:text-cyan-500 transition-colors"
+                className="text-sm text-gray-400 hover:text-teal-500 transition-colors"
               >
                 {link}
               </a>
@@ -28,7 +28,7 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="sm:hidden text-gray-400 hover:text-cyan-500 transition-colors"
+            className="sm:hidden text-gray-400 hover:text-teal-500 transition-colors"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
@@ -46,7 +46,7 @@ export default function Header() {
                 <a
                   key={link}
                   href={`#${link.toLowerCase()}`}
-                  className="text-sm text-gray-400 hover:text-cyan-500 transition-colors py-2"
+                  className="text-sm text-gray-400 hover:text-teal-500 transition-colors py-2"
                   onClick={() => setIsOpen(false)}
                 >
                   {link}

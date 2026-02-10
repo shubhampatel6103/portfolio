@@ -1,14 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { ExternalLink, Bookmark, ChevronDown } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible } from "@/components/ui/collapsible";
 
 const projects = [
   {
@@ -85,98 +80,68 @@ const projects = [
 ];
 
 export default function ProjectsSection() {
-  const [openItems, setOpenItems] = useState<string[]>([]);
-
-  const toggleItem = (id: string) => {
-    setOpenItems((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
-    );
-  };
-
   return (
     <section
       id="projects"
       className="w-full max-w-3xl px-16 py-16 scroll-mt-16 bg-black"
     >
-      <h2 className="text-sm font-semibold tracking-widest text-cyan-500 uppercase mb-8">
+      <h2 className="text-sm font-semibold tracking-widest text-teal-500 uppercase mb-8">
         Projects
       </h2>
 
       <div className="space-y-12">
         {projects.map((project) => {
-          const isOpen = openItems.includes(project.id);
-
           return (
-            <Collapsible
-              key={project.id}
-              open={isOpen}
-              onOpenChange={() => toggleItem(project.id)}
-            >
-              <div className="group relative grid gap-4 pb-1 transition-all sm:grid-cols-3 sm:gap-8 lg:hover:opacity-100 lg:group-hover/list:opacity-50 items-start">
-                {/* Project Image */}
-                <div className="relative overflow-hidden rounded-lg bg-gray-800 sm:col-span-1 h-40">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-40 object-cover hover:scale-105 transition-transform duration-300"
-                  />
+            <div key={project.id} className="group relative grid gap-4 pb-1 transition-all sm:grid-cols-3 sm:gap-8 lg:hover:opacity-100 lg:group-hover/list:opacity-50 items-start">
+              {/* Project Image */}
+              <div className="relative overflow-hidden rounded-lg bg-gray-800 sm:col-span-1 h-40">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-40 object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+
+              {/* Project Content */}
+              <div className="sm:col-span-2 space-y-3">
+                <div>
+                  <h3 className="font-medium leading-snug text-white flex items-center gap-2">
+                    {project.title}
+                    <Link
+                      href={project.projectUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-teal-500 hover:text-teal-400 transition-colors"
+                    >
+                      <ExternalLink className="size-4" />
+                    </Link>
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-400 leading-relaxed">
+                    {project.description}
+                  </p>
                 </div>
 
-                {/* Project Content */}
-                <div className="sm:col-span-2 space-y-3">
-                  <div>
-                    <h3 className="font-medium leading-snug text-white flex items-center gap-2">
-                      {project.title}
-                      <Link
-                        href={project.projectUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-cyan-500 hover:text-cyan-400 transition-colors"
-                      >
-                        <ExternalLink className="size-4" />
-                      </Link>
-                      <button className="text-gray-400 hover:text-cyan-500 transition-colors">
-                        <Bookmark className="size-4" />
-                      </button>
-                    </h3>
-                    <p className="mt-2 text-sm text-gray-400 leading-relaxed">
-                      {project.description}
-                    </p>
-                  </div>
-
-                  <CollapsibleTrigger className="flex items-center gap-1 text-xs text-gray-400 hover:text-cyan-500 transition-colors cursor-pointer">
-                    <ChevronDown
-                      className={`w-4 h-4 transition-transform duration-1000 ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                    {isOpen
-                      ? "Hide technical details"
-                      : "View technical details"}
-                  </CollapsibleTrigger>
-
-                  <CollapsibleContent className="space-y-2">
-                    <ul className="mt-2 space-y-1 text-sm text-gray-400 list-disc pl-4">
-                      {project.details.map((detail, i) => (
-                        <li key={i}>{detail}</li>
-                      ))}
-                    </ul>
-                  </CollapsibleContent>
-
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {project.technologies.map((tech) => (
-                      <Badge
-                        key={tech}
-                        variant="secondary"
-                        className="text-xs font-normal"
-                      >
-                        {tech}
-                      </Badge>
+                <Collapsible header="View technical details">
+                  <ul className="mt-2 space-y-1 text-sm text-gray-400 list-disc pl-4">
+                    {project.details.map((detail, i) => (
+                      <li key={i}>{detail}</li>
                     ))}
-                  </div>
+                  </ul>
+                </Collapsible>
+
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {project.technologies.map((tech) => (
+                    <Badge
+                      key={tech}
+                      variant="secondary"
+                      className="text-xs font-normal"
+                    >
+                      {tech}
+                    </Badge>
+                  ))}
                 </div>
               </div>
-            </Collapsible>
+            </div>
           );
         })}
       </div>

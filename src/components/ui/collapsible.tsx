@@ -1,113 +1,57 @@
 import React, { useState } from "react";
-
-interface CollapsibleContextType {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
-
-const CollapsibleContext = React.createContext<
-  CollapsibleContextType | undefined
->(undefined);
-
-const useCollapsible = () => {
-  const context = React.useContext(CollapsibleContext);
-  if (!context) {
-    throw new Error(
-      "Collapsible components must be used within a Collapsible component",
-    );
-  }
-  return context;
-};
+import { ChevronDown } from "lucide-react";
 
 interface CollapsibleProps extends React.HTMLAttributes<HTMLDivElement> {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
+  header?: React.ReactNode;
   defaultOpen?: boolean;
+  children: React.ReactNode;
 }
 
 const Collapsible = React.forwardRef<HTMLDivElement, CollapsibleProps>(
-  (
-    {
-      open: controlledOpen,
-      onOpenChange,
-      defaultOpen = false,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
-    const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
-    const isControlled = controlledOpen !== undefined;
-    const open = isControlled ? controlledOpen : uncontrolledOpen;
-
-    const handleOpenChange = (newOpen: boolean) => {
-      if (onOpenChange) {
-        onOpenChange(newOpen);
-      }
-      if (!isControlled) {
-        setUncontrolledOpen(newOpen);
-      }
-    };
+  ({ header, defaultOpen = false, children, className = "", ...props }, ref) => {
+    const [isOpen, setIsOpen] = useState(defaultOpen);
 
     return (
-      <CollapsibleContext.Provider
-        value={{ open, onOpenChange: handleOpenChange }}
-      >
-        <div ref={ref} {...props}>
+      <div ref={ref} className={className} {...props}>
+        {header ? (
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-full flex items-center justify-between gap-2 text-white hover:text-teal-500 transition-colors py-2"
+          >
+            <span className="text-left">{header}</span>
+            <ChevronDown
+              className={`w-4 h-4 transition-transform duration-500 shrink-0 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+        ) : (
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex items-center gap-1 text-xs text-gray-400 hover:text-teal-500 transition-colors cursor-pointer"
+          >
+            <ChevronDown
+              className={`w-4 h-4 transition-transform duration-500 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            />
+            {isOpen ? "Show less" : "Show more"}
+          </button>
+        )}
+
+        <div
+          className="overflow-hidden transition-all duration-500 ease-in-out"
+          style={{
+            maxHeight: isOpen ? "1000px" : "0",
+            opacity: isOpen ? 1 : 0,
+          }}
+        >
           {children}
         </div>
-      </CollapsibleContext.Provider>
+      </div>
     );
   },
 );
 Collapsible.displayName = "Collapsible";
 
-interface CollapsibleTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
-
-const CollapsibleTrigger = React.forwardRef<
-  HTMLButtonElement,
-  CollapsibleTriggerProps
->(({ onClick, ...props }, ref) => {
-  const { open, onOpenChange } = useCollapsible();
-
-  return (
-    <button
-      ref={ref}
-      onClick={(e) => {
-        onOpenChange(!open);
-        onClick?.(e);
-      }}
-      aria-expanded={open}
-      {...props}
-    />
-  );
-});
-CollapsibleTrigger.displayName = "CollapsibleTrigger";
-
-interface CollapsibleContentProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-const CollapsibleContent = React.forwardRef<
-  HTMLDivElement,
-  CollapsibleContentProps
->(({ children, className = "", ...props }, ref) => {
-  const { open } = useCollapsible();
-
-  return (
-    <div
-      ref={ref}
-      hidden={!open}
-      data-state={open ? "open" : "closed"}
-      className={`overflow-hidden transition-all duration-1000 ease-in-out ${className}`}
-      style={{
-        maxHeight: open ? "1000px" : "0",
-        opacity: open ? 1 : 0,
-      }}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-});
-CollapsibleContent.displayName = "CollapsibleContent";
-
-export { Collapsible, CollapsibleTrigger, CollapsibleContent };
+export { Collapsible };

@@ -38,7 +38,7 @@ export default function HeroSection() {
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-white mb-4 tracking-tight">
               Shubham Patel
             </h1>
-            <h2 className="text-xl sm:text-2xl text-cyan-500 font-medium">
+            <h2 className="text-xl sm:text-2xl text-teal-500 font-medium">
               Software Engineer
             </h2>
           </div>
@@ -69,7 +69,7 @@ export default function HeroSection() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-cyan-500 transition-colors"
+                className="text-gray-400 hover:text-teal-500 transition-colors"
                 aria-label={social.alt}
               >
                 {social.icon}
