@@ -28,28 +28,31 @@ const education = [
 
 const awards = [
   {
-    name: "Dean's List",
-    year: "2023 — 2025",
+    name: "President's Gold Scholarship",
+    year: "2022 — 2025",
     description:
-      "Achieved academic excellence with GPA above 3.8 across consecutive years",
+      "Wilfrid Laurier University - Cumulative GPA 10.5+ and 95%+ high school average",
   },
   {
-    name: "Hackathon Winner - HexHacks",
-    year: "2024",
-    description:
-      "Built a real-time collaboration tool that won Best Technical Implementation",
+    name: "Gold Award Highest Academic Standing",
+    year: "2022",
+    description: "Preston High School - Highest academic standing",
   },
   {
-    name: "Scholarship - President's Scholarship",
+    name: "Nicolls Award",
+    year: "2022",
+    description: "Preston High School - Excellence in mathematics and physics",
+  },
+  {
+    name: "Principal's Award",
     year: "2022",
     description:
-      "Awarded for outstanding academic achievement and community involvement",
+      "Preston High School - Contributions to school development with respect of staff and students",
   },
   {
-    name: "Best Project Award - Data Structures Course",
-    year: "2023",
-    description:
-      "Developed an optimized graph algorithm implementation surpassing class standards",
+    name: "The Robin Armstrong Scholarship",
+    year: "2022",
+    description: "Preston High School - Academic excellence",
   },
 ];
 

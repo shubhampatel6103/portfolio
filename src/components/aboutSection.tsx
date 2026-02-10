@@ -5,8 +5,32 @@ import { Badge } from "@/components/ui/badge";
 
 export default function AboutSection() {
   const skills = [
-    "React",
+    "Python",
     "TypeScript",
+    "JavaScript",
+    "SQL",
+    "Scala",
+    "Java",
+    "Dart",
+    "React",
+    "Next.js",
+    "Django",
+    "TailwindCSS",
+    "scikit-learn",
+    "Pandas",
+    "NumPy",
+    "AI/ML models",
+    "Feature Engineering",
+    "Data Analysis",
+    "Google Cloud Platform",
+    "AWS",
+    "Docker",
+    "Firebase",
+    "Vercel",
+    "CI/CD Pipelines",
+    "Git/GitHub",
+    "Linux",
+    "Web Scraping",
     "UI/UX",
     "Accessibility",
     "Web Design",
@@ -20,53 +44,36 @@ export default function AboutSection() {
 
       <div className="space-y-6 text-zinc-400 dark:text-zinc-400 leading-8">
         <p>
-          I'm a software engineer passionate about crafting accessible,
-          pixel-perfect user interfaces that blend thoughtful design with robust
-          engineering. My favorite work lies at the intersection of design and
-          development, creating experiences that not only look great but are
-          meticulously built for performance and usability.
+          I love building projects that have a positive impact on people's
+          lives. My side projects have mostly been focused on implementing
+          something that I or someone can use on a daily basis, such as to learn
+          something or to solve a problem.
         </p>
 
         <p>
-          Currently, I'm focused on building products that make a difference.
-          I've had the opportunity to work across various settings—from{" "}
-          <span className="font-semibold text-white">startups</span> to{" "}
-          <span className="font-semibold text-white">research labs</span> to{" "}
-          <span className="font-semibold text-white">
-            established companies
-          </span>
-          .
+          I enjoy the thrill of learning and applying them to solve challenges.
+          Apart from technolgy, I am deeply interested in sports/outdoor
+          activities, reading books, and sketching. From time to time, I learn
+          new skills or topics like languages such as French and ASL, cooking,
+          history etc.
         </p>
 
-        <Collapsible>
-          <div className="space-y-4">
-            <p>
-              Beyond coding, I'm deeply interested in user experience design,
-              accessibility standards, and the latest web technologies. I
-              believe that great software is a balance between innovation and
-              pragmatism, always keeping the end user in mind.
-            </p>
-
-            <p>
-              When I'm not building digital experiences, you can find me
-              exploring new design patterns, contributing to open source
-              projects, or sharing knowledge with the developer community.
-            </p>
-
-            <div className="pt-2">
-              <p className="text-sm font-semibold text-white mb-3">
-                Core Skills & Interests
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {skills.map((skill) => (
-                  <Badge key={skill} variant="secondary" className="text-xs font-normal">
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
-            </div>
+        <div className="pt-2">
+          <p className="text-sm font-semibold text-white mb-3">
+            Core Skills & Interests
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {skills.map((skill) => (
+              <Badge
+                key={skill}
+                variant="secondary"
+                className="text-xs font-normal"
+              >
+                {skill}
+              </Badge>
+            ))}
           </div>
-        </Collapsible>
+        </div>
       </div>
     </section>
   );
