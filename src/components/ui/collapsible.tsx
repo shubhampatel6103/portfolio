@@ -4,18 +4,40 @@ import { ChevronDown } from "lucide-react";
 interface CollapsibleProps extends React.HTMLAttributes<HTMLDivElement> {
   header?: React.ReactNode;
   defaultOpen?: boolean;
+  isOpen?: boolean;
+  onToggle?: () => void;
   children: React.ReactNode;
 }
 
 const Collapsible = React.forwardRef<HTMLDivElement, CollapsibleProps>(
-  ({ header, defaultOpen = false, children, className = "", ...props }, ref) => {
-    const [isOpen, setIsOpen] = useState(defaultOpen);
+  (
+    {
+      header,
+      defaultOpen = false,
+      isOpen: controlledIsOpen,
+      onToggle,
+      children,
+      className = "",
+      ...props
+    },
+    ref,
+  ) => {
+    const [internalIsOpen, setInternalIsOpen] = useState(defaultOpen);
+    const isOpen =
+      controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
+
+    const handleToggle = () => {
+      if (controlledIsOpen === undefined) {
+        setInternalIsOpen(!internalIsOpen);
+      }
+      onToggle?.();
+    };
 
     return (
       <div ref={ref} className={className} {...props}>
         {header ? (
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={handleToggle}
             className="w-full flex items-center justify-between gap-2 text-white hover:text-teal-500 transition-colors py-2 border-b border-teal-700/30"
           >
             <span className="text-left">{header}</span>
@@ -27,7 +49,7 @@ const Collapsible = React.forwardRef<HTMLDivElement, CollapsibleProps>(
           </button>
         ) : (
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={handleToggle}
             className="flex items-center gap-1 text-xs text-gray-400 hover:text-teal-500 transition-colors cursor-pointer"
           >
             <ChevronDown

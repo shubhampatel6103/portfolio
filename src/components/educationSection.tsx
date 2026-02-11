@@ -19,7 +19,7 @@ const education = [
     school: "Wilfrid Laurier University",
     period: "2022 — 2027",
     details: [
-      "GPA: 3.8/4.0",
+      "GPA: 3.9/4.0",
       "Part of the Laurier Student Investment Fund (LSIF) where I analyze and manage a portfolio of stocks",
       "Relevant Courses: Finance basics, Equity analysis, Derivatives markets",
     ],
