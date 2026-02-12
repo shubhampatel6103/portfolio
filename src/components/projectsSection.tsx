@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible } from "@/components/ui/collapsible";
+import Image from "next/image";
 
 const projects = [
   {
@@ -95,7 +96,9 @@ export default function ProjectsSection() {
             <div key={project.id} className="group relative grid gap-4 pb-1 transition-all sm:grid-cols-3 sm:gap-8 lg:hover:opacity-100 lg:group-hover/list:opacity-50 items-start">
               {/* Project Image */}
               <div className="relative overflow-hidden rounded-lg bg-gray-800 sm:col-span-1 h-40">
-                <img
+                <Image
+                  width={2}
+                  height={1}
                   src={project.image}
                   alt={project.title}
                   className="w-full h-40 object-cover hover:scale-105 transition-transform duration-300"

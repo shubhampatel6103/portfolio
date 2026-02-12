@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
 import { Github, Linkedin, Mail } from "lucide-react";
 import TypingText from "@/components/typingText";
 

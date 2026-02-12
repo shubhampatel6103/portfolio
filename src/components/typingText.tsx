@@ -21,7 +21,7 @@ export default function TypingText({
 
   useEffect(() => {
     const currentWord = words[wordIndex];
-    let timer: NodeJS.Timeout;
+    let timer: ReturnType<typeof setTimeout> | undefined;
 
     if (!isDeleting) {
       if (displayText.length < currentWord.length) {
@@ -39,12 +39,18 @@ export default function TypingText({
           setDisplayText(displayText.slice(0, -1));
         }, speed / 2);
       } else {
-        setIsDeleting(false);
-        setWordIndex((prev) => (prev + 1) % words.length);
+        timer = setTimeout(() => {
+          setIsDeleting(false);
+          setWordIndex((prev) => (prev + 1) % words.length);
+        }, 0);
       }
     }
 
-    return () => clearTimeout(timer);
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
   }, [displayText, wordIndex, isDeleting, words, speed, delayBetweenWords]);
 
   return (

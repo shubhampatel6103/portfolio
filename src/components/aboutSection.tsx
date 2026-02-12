@@ -10,7 +10,7 @@ export default function AboutSection() {
 
       <div className="space-y-6 text-zinc-400 dark:text-zinc-400 leading-8">
         <p>
-          I love building projects that have a positive impact on people's
+          I love building projects that have a positive impact on people&apos;s
           lives. My side projects have mostly been focused on implementing
           something that I or someone can use on a daily basis, such as to learn
           something or to solve a problem.
