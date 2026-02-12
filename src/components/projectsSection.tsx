@@ -1,86 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Collapsible } from "@/components/ui/collapsible";
 import Image from "next/image";
+import { useState } from "react";
 
 const projects = [
   {
     id: "project-1",
-    title: "Task Management App",
+    title: "Mac-a-park",
     description:
-      "A full-stack task management application with real-time collaboration features, drag-and-drop interface, and team workspaces.",
-    image: "https://via.placeholder.com/230x150?text=Task+Management",
-    projectUrl: "https://example.com",
+      "Mac-A-Park is a real-time smart parking detection system that leverages existing CCTV cameras and computer vision to detect parking slot occupancy. It provides a low-cost, scalable solution for urban areas and large parking facilities, reducing traffic congestion, emissions, and driver frustration.",
+    videoUrl: "/projects/mac-a-park-demo.mp4",
+    projectUrl: "https://github.com/Yatriba-Rathod/Mac-a-thon-2026",
     technologies: [
+      "OpenCV",
+      "FastAPI",
+      "Google Firebase",
+      "MongoDB",
+      "NumPy",
+      "Python",
+      "Render.com",
       "Next.js",
-      "TypeScript",
-      "Prisma",
-      "PostgreSQL",
+      "React",
       "Tailwind CSS",
+      "TypeScript",
     ],
-    details: [
-      "Built with React and TypeScript for type-safe frontend development",
-      "Real-time collaboration using WebSockets",
-      "PostgreSQL database with Prisma ORM",
-      "Responsive design with Tailwind CSS",
-    ],
+    image: null,
   },
   {
     id: "project-2",
-    title: "E-commerce Platform",
+    title: "Morse Code Tutor",
     description:
-      "A modern e-commerce platform with cart functionality, payment integration, and inventory management dashboard.",
-    image: "https://via.placeholder.com/230x150?text=E-commerce",
-    projectUrl: "https://example.com",
-    technologies: ["React", "Node.js", "Stripe", "MongoDB", "Redis"],
-    details: [
-      "Payment processing with Stripe integration",
-      "Real-time inventory tracking",
-      "Admin dashboard for product management",
-      "Redis caching for performance optimization",
-    ],
-  },
-  {
-    id: "project-3",
-    title: "AI Writing Assistant",
-    description:
-      "A Chrome extension that uses AI to help users write better emails and documents with grammar suggestions and tone adjustments.",
-    image: "https://via.placeholder.com/230x150?text=AI+Writing",
-    projectUrl: "https://example.com",
-    technologies: [
-      "TypeScript",
-      "OpenAI API",
-      "Chrome Extensions API",
-      "React",
-    ],
-    details: [
-      "Chrome extension using Manifest V3",
-      "Integration with OpenAI GPT API",
-      "Real-time text analysis and suggestions",
-      "Tone and style customization options",
-    ],
-  },
-  {
-    id: "project-4",
-    title: "Portfolio Website Generator",
-    description:
-      "A tool that generates beautiful portfolio websites from a simple configuration file or JSON data.",
-    image: "https://via.placeholder.com/230x150?text=Portfolio",
-    projectUrl: "https://example.com",
-    technologies: ["Python", "Jinja2", "GitHub Actions", "Netlify"],
-    details: [
-      "CLI tool for generating static portfolio sites",
-      "Support for custom themes and layouts",
-      "Automated deployment with GitHub Actions",
-      "SEO optimized output",
-    ],
+      "Learn morse code letter by letter, practice transmitting as well as receiving morse code. Try the website to learn more.",
+    image: "/projects/morse-code.png",
+    video: null,
+    projectUrl: "https://morse-code-tutor.vercel.app/",
+    technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
   },
 ];
 
 export default function ProjectsSection() {
+  const [enlargedVideoId, setEnlargedVideoId] = useState<string | null>(null);
+
   return (
     <section
       id="projects"
@@ -93,16 +56,32 @@ export default function ProjectsSection() {
       <div className="space-y-12">
         {projects.map((project) => {
           return (
-            <div key={project.id} className="group relative grid gap-4 pb-1 transition-all sm:grid-cols-3 sm:gap-8 lg:hover:opacity-100 lg:group-hover/list:opacity-50 items-start">
-              {/* Project Image */}
-              <div className="relative overflow-hidden rounded-lg bg-gray-800 sm:col-span-1 h-40">
-                <Image
-                  width={2}
-                  height={1}
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-40 object-cover hover:scale-105 transition-transform duration-300"
-                />
+            <div
+              key={project.id}
+              className="group relative grid gap-4 pb-1 transition-all sm:grid-cols-3 sm:gap-8 lg:hover:opacity-100 lg:group-hover/list:opacity-50 items-start"
+            >
+              {/* Project Image/Video */}
+              <div className="relative overflow-hidden rounded-lg bg-gray-800 sm:col-span-1 h-40 group">
+                {project.videoUrl ? (
+                  <>
+                    <video
+                      src={project.videoUrl}
+                      className="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300 cursor-pointer"
+                      muted
+                      autoPlay
+                      loop
+                      onClick={() => setEnlargedVideoId(project.id)}
+                    />
+                  </>
+                ) : (
+                  <Image
+                    width={300}
+                    height={200}
+                    src={project.image || "/placeholder.jpg"}
+                    alt={project.title}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                )}
               </div>
 
               {/* Project Content */}
@@ -124,14 +103,6 @@ export default function ProjectsSection() {
                   </p>
                 </div>
 
-                <Collapsible header="View technical details">
-                  <ul className="mt-2 space-y-1 text-sm text-gray-400 list-disc pl-4">
-                    {project.details.map((detail, i) => (
-                      <li key={i}>{detail}</li>
-                    ))}
-                  </ul>
-                </Collapsible>
-
                 <div className="flex flex-wrap gap-2 mt-3">
                   {project.technologies.map((tech) => (
                     <Badge
@@ -148,6 +119,33 @@ export default function ProjectsSection() {
           );
         })}
       </div>
+
+      {/* Enlarged Video Modal */}
+      {enlargedVideoId && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50"
+          onClick={() => setEnlargedVideoId(null)}
+        >
+          <div
+            className="relative w-11/12 h-5/6 max-w-4xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setEnlargedVideoId(null)}
+              className="absolute top-4 right-4 z-10 text-white hover:text-gray-300 transition-colors"
+            >
+              <X className="size-8" />
+            </button>
+            <video
+              src={projects.find((p) => p.id === enlargedVideoId)?.videoUrl}
+              className="w-full h-full object-contain"
+              muted
+              autoPlay
+              loop
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 }

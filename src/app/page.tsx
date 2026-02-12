@@ -5,6 +5,7 @@ import AboutSection from "@/components/aboutSection";
 import ExperienceSection from "@/components/experienceSection";
 import ProjectsSection from "@/components/projectsSection";
 import ScrollToTop from "@/components/scrollToTop";
+import Footer from "@/components/footer";
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
       <div className="flex justify-center">
         <ProjectsSection />
       </div>
+      <Footer />
     </div>
   );
 }
