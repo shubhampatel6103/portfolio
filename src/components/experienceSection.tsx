@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Collapsible } from "@/components/ui/collapsible";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const experiences = [
   {
@@ -124,92 +123,240 @@ const experiences = [
 ];
 
 export default function ExperienceSection() {
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const cardRefs = useRef<Array<HTMLElement | null>>([]);
 
-  const toggleExpanded = (index: number) => {
-    setExpandedIndex(expandedIndex === index ? null : index);
+  const totalExperiences = experiences.length;
+
+  const scrollToIndex = (
+    index: number,
+    behavior: ScrollBehavior = "smooth",
+  ) => {
+    const normalizedIndex = (index + totalExperiences) % totalExperiences;
+    const target = cardRefs.current[normalizedIndex];
+
+    if (!target) {
+      return;
+    }
+
+    target.scrollIntoView({
+      behavior,
+      inline: "center",
+      block: "nearest",
+    });
+    setActiveIndex(normalizedIndex);
   };
+
+  const previousExperience = () => {
+    scrollToIndex(activeIndex - 1);
+  };
+
+  const nextExperience = () => {
+    scrollToIndex(activeIndex + 1);
+  };
+
+  useEffect(() => {
+    scrollToIndex(activeIndex, "auto");
+  }, []);
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) {
+      return;
+    }
+
+    let rafId = 0;
+
+    const syncActiveIndexFromScroll = () => {
+      const viewportCenter = carousel.scrollLeft + carousel.clientWidth / 2;
+      let nearestIndex = activeIndex;
+      let nearestDistance = Number.POSITIVE_INFINITY;
+
+      cardRefs.current.forEach((card, index) => {
+        if (!card) {
+          return;
+        }
+
+        const cardCenter = card.offsetLeft + card.clientWidth / 2;
+        const distance = Math.abs(cardCenter - viewportCenter);
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearestIndex = index;
+        }
+      });
+
+      if (nearestIndex !== activeIndex) {
+        setActiveIndex(nearestIndex);
+      }
+    };
+
+    const onScroll = () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+      rafId = requestAnimationFrame(syncActiveIndexFromScroll);
+    };
+
+    carousel.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+      carousel.removeEventListener("scroll", onScroll);
+    };
+  }, [activeIndex]);
 
   return (
     <section
       id="experience"
-      className="w-full max-w-3xl px-16 py-16 scroll-mt-16 bg-black"
+      className="portfolio-section flex items-center px-6 py-10 md:px-12"
     >
-      <h2 className="text-sm font-semibold tracking-widest text-teal-500 uppercase mb-8">
-        Experience
-      </h2>
+      <div className="motion-fade-up mx-auto w-full max-w-5xl">
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <h2 className="text-sm font-semibold tracking-[0.2em] text-cyan-300 uppercase">
+            Experience
+          </h2>
 
-      <div className="space-y-8">
-        {experiences.map((exp, index) => {
-          return (
-            <div
-              key={index}
-              className="group relative grid gap-4 pb-1 transition-all sm:grid-cols-8 sm:gap-8 lg:hover:opacity-100 lg:group-hover/list:opacity-50"
+          <div className="flex items-center gap-2 text-xs text-slate-400">
+            <button
+              onClick={previousExperience}
+              className="rounded-full border border-slate-600 p-2 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-300 hover:text-cyan-300"
+              aria-label="Previous experience"
             >
-              <div className="sm:col-span-2 flex flex-col items-start gap-3">
-                <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
-                  {exp.period}
-                </p>
-                {exp.logoPath && (
-                  <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-700 shrink-0">
-                    <Image
-                      src={exp.logoPath}
-                      alt={`${exp.company} logo`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                )}
-              </div>
+              <ChevronLeft className="size-4" />
+            </button>
+            <span className="w-16 text-center">
+              {activeIndex + 1} / {totalExperiences}
+            </span>
+            <button
+              onClick={nextExperience}
+              className="rounded-full border border-slate-600 p-2 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-300 hover:text-cyan-300"
+              aria-label="Next experience"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          </div>
+        </div>
 
-              <div className="sm:col-span-6 space-y-3">
-                <div>
-                  <h3 className="font-medium leading-snug text-white">
-                    {exp.title} ·{" "}
-                    <Link
-                      href={exp.companyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-teal-500 hover:underline inline-flex items-center gap-1"
-                    >
-                      {exp.company}
-                      <ExternalLink className="size-3" />
-                    </Link>
-                  </h3>
-                  {exp.location && (
-                    <p className="text-xs text-gray-500 mt-1">{exp.location}</p>
-                  )}
-                  <p className="mt-2 text-sm text-gray-400 leading-relaxed">
-                    {exp.description}
-                  </p>
-                </div>
+        <div
+          className="perspective-[1000px]"
+          aria-label="Experience carousel"
+          role="region"
+        >
+          <div
+            ref={carouselRef}
+            className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-3 py-4 scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x"
+          >
+            {experiences.map((experience, index) => {
+              const distance = index - activeIndex;
+              const clampedDistance = Math.max(-2, Math.min(2, distance));
+              const rotateY = clampedDistance * -14;
+              const scale =
+                distance === 0 ? 1 : Math.abs(distance) === 1 ? 0.89 : 0.8;
+              const opacity =
+                distance === 0 ? 1 : Math.abs(distance) === 1 ? 0.58 : 0.32;
 
-                <Collapsible
-                  isOpen={expandedIndex === index}
-                  onToggle={() => toggleExpanded(index)}
+              return (
+                <article
+                  key={experience.title + experience.period}
+                  ref={(node) => {
+                    cardRefs.current[index] = node;
+                  }}
+                  className="motion-fade snap-center shrink-0 w-[93%] md:w-[84%] lg:w-[78%] rounded-2xl border border-slate-700/70 bg-[rgba(16,23,38,0.82)] p-6 sm:p-7 transition-[transform,opacity,border-color] duration-500"
+                  style={{
+                    opacity,
+                    transform: `translateZ(${distance === 0 ? 0 : -64}px) rotateY(${rotateY}deg) scale(${scale})`,
+                    borderColor:
+                      distance === 0
+                        ? "rgba(103, 232, 249, 0.45)"
+                        : "rgba(51, 65, 85, 0.7)",
+                  }}
+                  onClick={() => scrollToIndex(index)}
                 >
-                  <ul className="mt-2 space-y-1 text-sm text-gray-400 list-disc pl-4">
-                    {exp.details.map((detail, i) => (
-                      <li key={i}>{detail}</li>
-                    ))}
-                  </ul>
-                </Collapsible>
+                  <div className="grid gap-6 lg:grid-cols-[220px_1fr]">
+                    <div className="space-y-3">
+                      <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+                        {experience.period}
+                      </p>
+                      {experience.logoPath && (
+                        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-slate-700">
+                          <Image
+                            src={experience.logoPath}
+                            alt={`${experience.company} logo`}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      )}
+                      {experience.location && (
+                        <p className="text-sm text-slate-400">
+                          {experience.location}
+                        </p>
+                      )}
+                    </div>
 
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {exp.technologies.map((tech) => (
-                    <Badge
-                      key={tech}
-                      variant="secondary"
-                      className="text-xs font-normal"
-                    >
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </div>
-          );
-        })}
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="text-lg font-medium leading-snug text-white">
+                          {experience.title} ·{" "}
+                          <Link
+                            href={experience.companyUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-cyan-300 hover:underline"
+                          >
+                            {experience.company}
+                            <ExternalLink className="size-3" />
+                          </Link>
+                        </h3>
+                        <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                          {experience.description}
+                        </p>
+                      </div>
+
+                      <ul className="hidden list-disc space-y-1 pl-4 text-sm text-slate-300 md:block">
+                        {experience.details
+                          .slice(0, 4)
+                          .map((detail, detailIndex) => (
+                            <li key={detailIndex}>{detail}</li>
+                          ))}
+                      </ul>
+
+                      <div className="flex flex-wrap gap-2">
+                        {experience.technologies.map((tech) => (
+                          <Badge
+                            key={tech}
+                            variant="secondary"
+                            className="text-xs font-normal"
+                          >
+                            {tech}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          <div className="mt-3 hidden flex-wrap justify-center gap-2 px-3 md:flex">
+            {experiences.map((experience, index) => (
+              <button
+                key={experience.title + experience.period}
+                onClick={() => scrollToIndex(index)}
+                className={`rounded-full px-3 py-1 text-xs transition-all duration-300 hover:-translate-y-0.5 ${
+                  index === activeIndex
+                    ? "bg-cyan-300/20 text-cyan-200"
+                    : "bg-slate-700/40 text-slate-300 hover:bg-slate-600/50"
+                }`}
+              >
+                {experience.company}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

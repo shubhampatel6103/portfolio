@@ -47,23 +47,22 @@ export default function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="w-full max-w-3xl px-16 py-16 scroll-mt-16 bg-black"
+      className="portfolio-section flex items-center px-6 py-10 md:px-12"
     >
-      <h2 className="text-sm font-semibold tracking-widest text-teal-500 uppercase mb-8">
-        Projects
-      </h2>
+      <div className="motion-fade-up mx-auto w-full max-w-5xl">
+        <h2 className="text-sm font-semibold tracking-[0.2em] text-cyan-300 uppercase mb-7">
+          Projects
+        </h2>
 
-      <div className="space-y-12">
-        {projects.map((project) => {
-          return (
-            <div
-              key={project.id}
-              className="group relative grid gap-4 pb-1 transition-all sm:grid-cols-3 sm:gap-8 lg:hover:opacity-100 lg:group-hover/list:opacity-50 items-start"
-            >
-              {/* Project Image/Video */}
-              <div className="relative overflow-hidden rounded-lg bg-gray-800 sm:col-span-1 h-40 group">
-                {project.videoUrl ? (
-                  <>
+        <div className="grid gap-5 lg:grid-cols-2">
+          {projects.map((project) => {
+            return (
+              <article
+                key={project.id}
+                className="rounded-xl border border-slate-700/70 bg-[rgba(16,23,38,0.75)] p-4 transition-all duration-500 hover:-translate-y-1 hover:border-cyan-300/40 sm:p-5"
+              >
+                <div className="relative overflow-hidden rounded-lg bg-slate-800 h-40 group">
+                  {project.videoUrl ? (
                     <video
                       src={project.videoUrl}
                       className="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300 cursor-pointer"
@@ -72,58 +71,55 @@ export default function ProjectsSection() {
                       loop
                       onClick={() => setEnlargedVideoId(project.id)}
                     />
-                  </>
-                ) : (
-                  <Image
-                    width={300}
-                    height={200}
-                    src={project.image || "/placeholder.jpg"}
-                    alt={project.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                )}
-              </div>
+                  ) : (
+                    <Image
+                      width={300}
+                      height={200}
+                      src={project.image || "/placeholder.jpg"}
+                      alt={project.title}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    />
+                  )}
+                </div>
 
-              {/* Project Content */}
-              <div className="sm:col-span-2 space-y-3">
-                <div>
+                <div className="mt-4 space-y-3">
                   <h3 className="font-medium leading-snug text-white flex items-center gap-2">
                     {project.title}
                     <Link
                       href={project.projectUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-teal-500 hover:text-teal-400 transition-colors"
+                      className="text-cyan-300 hover:text-cyan-200 transition-colors"
                     >
                       <ExternalLink className="size-4" />
                     </Link>
                   </h3>
-                  <p className="mt-2 text-sm text-gray-400 leading-relaxed">
+                  <p className="max-h-24 overflow-hidden text-sm text-slate-300 leading-relaxed">
                     {project.description}
                   </p>
-                </div>
 
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {project.technologies.map((tech) => (
-                    <Badge
-                      key={tech}
-                      variant="secondary"
-                      className="text-xs font-normal"
-                    >
-                      {tech}
-                    </Badge>
-                  ))}
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.slice(0, 8).map((tech) => (
+                      <Badge
+                        key={tech}
+                        variant="secondary"
+                        className="text-xs font-normal"
+                      >
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
-          );
-        })}
+              </article>
+            );
+          })}
+        </div>
       </div>
 
       {/* Enlarged Video Modal */}
       {enlargedVideoId && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 motion-fade"
           onClick={() => setEnlargedVideoId(null)}
         >
           <div

@@ -5,29 +5,19 @@ import AboutSection from "@/components/aboutSection";
 import ExperienceSection from "@/components/experienceSection";
 import ProjectsSection from "@/components/projectsSection";
 import ScrollToTop from "@/components/scrollToTop";
-import Footer from "@/components/footer";
 
 export default function Home() {
   return (
-    <div className="bg-black font-sans">
+    <div className="portfolio-shell">
       <ScrollToTop />
       <Header />
-      <div className="flex justify-center">
+      <main className="snap-y snap-mandatory md:pl-72">
         <HeroSection />
-      </div>
-      <div className="flex justify-center">
         <EducationSection />
-      </div>
-      <div className="flex justify-center">
-        <AboutSection />
-      </div>
-      <div className="flex justify-center">
+        {/* <AboutSection /> */}
         <ExperienceSection />
-      </div>
-      <div className="flex justify-center">
         <ProjectsSection />
-      </div>
-      <Footer />
+      </main>
     </div>
   );
 }
