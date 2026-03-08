@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ExternalLink, X } from "lucide-react";
+import { ExternalLink, PlayCircle, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { useState } from "react";
@@ -63,14 +63,24 @@ export default function ProjectsSection() {
               >
                 <div className="relative overflow-hidden rounded-lg bg-slate-800 h-40 group">
                   {project.videoUrl ? (
-                    <video
-                      src={project.videoUrl}
-                      className="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300 cursor-pointer"
-                      muted
-                      autoPlay
-                      loop
-                      onClick={() => setEnlargedVideoId(project.id)}
-                    />
+                    <>
+                      <video
+                        src={project.videoUrl}
+                        className="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300 cursor-pointer"
+                        muted
+                        autoPlay
+                        loop
+                        onClick={() => setEnlargedVideoId(project.id)}
+                      />
+                      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                        <div className="flex items-center gap-2 rounded-full border border-cyan-200/40 bg-black/60 px-3 py-2 text-cyan-100 backdrop-blur-sm">
+                          <PlayCircle className="size-5" />
+                          <span className="text-xs font-medium tracking-wide">
+                            Click to expand
+                          </span>
+                        </div>
+                      </div>
+                    </>
                   ) : (
                     <Image
                       width={300}
@@ -94,7 +104,7 @@ export default function ProjectsSection() {
                       <ExternalLink className="size-4" />
                     </Link>
                   </h3>
-                  <p className="max-h-24 overflow-hidden text-sm text-slate-300 leading-relaxed">
+                  <p className="text-sm text-slate-300 leading-relaxed">
                     {project.description}
                   </p>
 

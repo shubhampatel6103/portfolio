@@ -134,17 +134,21 @@ export default function ExperienceSection() {
     behavior: ScrollBehavior = "smooth",
   ) => {
     const normalizedIndex = (index + totalExperiences) % totalExperiences;
+    const carousel = carouselRef.current;
     const target = cardRefs.current[normalizedIndex];
 
-    if (!target) {
+    if (!target || !carousel) {
       return;
     }
 
-    target.scrollIntoView({
+    const targetLeft =
+      target.offsetLeft - (carousel.clientWidth - target.clientWidth) / 2;
+
+    carousel.scrollTo({
+      left: targetLeft,
       behavior,
-      inline: "center",
-      block: "nearest",
     });
+
     setActiveIndex(normalizedIndex);
   };
 
