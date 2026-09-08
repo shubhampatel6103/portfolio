@@ -8,6 +8,30 @@ import { useEffect, useRef, useState } from "react";
 
 const experiences = [
   {
+    period: "May 2026 — Aug. 2026",
+    title: "Software Development Engineer Intern",
+    company: "Amazon Web Services (AWS)",
+    companyUrl: "https://aws.amazon.com",
+    location: "Vancouver, BC",
+    logoPath: "/experience/aws.png",
+    description:
+      "Designed and built quota-monitoring systems to support migration of legacy limit-management workflows and real-time visibility across regions.",
+    technologies: [
+      "Java",
+      "TypeScript",
+      "AWS Lambda",
+      "DynamoDB",
+      "CloudFormation",
+      "Service Quotas",
+    ],
+    details: [
+      "Designed the architecture and backend for minute-level Amazon Connect quota utilization metrics, enabling migration from legacy workflows and real-time visibility across regions",
+      "Automated customer quota increase workflows, reducing average turnaround time from 15–20 days to 6–8 days by streamlining approvals and provisioning",
+      "Introduced structured request validation that reduced on-call investigation caused by missing information and submission errors by 80%",
+      "Built the supporting infrastructure with Java, TypeScript, AWS Lambda, DynamoDB, CloudFormation, and Service Quotas",
+    ],
+  },
+  {
     period: "September 2025 — January 2026",
     title: "Data Engineer / Analyst",
     company: "AutoTrader",
@@ -16,11 +40,11 @@ const experiences = [
     logoPath: "/experience/autotrader-logo.jpg",
     description:
       "Built and managed end-to-end data pipelines to enable analytics and improve business intelligence outcomes.",
-    technologies: ["Python", "SQL", "Analytics"],
+    technologies: ["Python", "SQL", "ETL", "Data Quality"],
     details: [
-      "Automated scalable data pipelines using Python and SQL to deliver analytics supporting key business decisions",
-      "Processed and transformed large datasets to improve reliability of downstream reporting and performance tracking",
-      "Developed data quality checks and validation logic, reducing inconsistencies across analytics outputs",
+      "Built optimized Python and SQL ETL pipelines processing gigabytes of data daily across 2,000+ dealerships, supporting executive analytics and operational reporting at scale",
+      "Automated a manual deployment and validation workflow, reducing end-to-end execution time from 16 hours to 15 minutes while eliminating configuration errors",
+      "Developed data quality checks and alerting to improve downstream reporting reliability and prevent invalid dealership data from reaching analysts",
     ],
   },
   {
@@ -34,9 +58,8 @@ const experiences = [
       "Engineered static analysis tools to identify and prevent compiler-level errors in Scala applications.",
     technologies: ["Scala", "Compiler Analysis", "DAG", "Testing"],
     details: [
-      "Developed a Scala compiler analysis feature to detect and prevent global object initialization errors",
-      "Designed test suites and debugged core compiler logic, improving robustness of static analysis workflows",
-      "Applied graph-based reasoning (e.g., directed acyclic graphs) to ensure correctness and explainability of warnings",
+      "Developed a Scala compiler analysis feature to detect global object initialization issues and validate initialization safety through compiler tests and graph-based dependency analysis",
+      "Researched compiler design and grammar rules to strengthen static analysis methods and improve the correctness of compiler warnings",
     ],
   },
   {
@@ -51,15 +74,14 @@ const experiences = [
     technologies: [
       "Next.js",
       "TypeScript",
-      "SQL",
+      "PostgreSQL",
       "Google Cloud",
       "Gemini API",
     ],
     details: [
-      "Built and deployed financial modeling tools using Next.js, TypeScript, SQL, and Google Cloud",
-      "Implemented valuation, forecasting, and capital budgeting features, reducing advisor workload by 70%+",
-      "Integrated an AI document extraction assistant using Gemini API and Cloud Functions to automate calculations",
-      "Designed scalable backend workflows and database structures to support secure client financial data and real-time tool usage",
+      "Built secure financial modeling tools using Next.js, TypeScript, PostgreSQL, and Google Cloud to support valuation, forecasting, and planning workflows",
+      "Developed an AI-powered document extraction system using Gemini API and Cloud Functions, improving parsing accuracy from 58% to 98% across financial statements",
+      "Automated document processing workflows, reducing manual review effort for certified financial advisors by over twenty hours weekly",
     ],
   },
   {
@@ -73,10 +95,8 @@ const experiences = [
       "Built healthcare mobile app with secure connectivity to medical devices and enterprise-grade data privacy features.",
     technologies: ["Dart", "Flutter", "Android Studio", "Figma", "Canva"],
     details: [
-      "Researched technologies and tools to find the best solutions for developing an application connecting to KAT Innovation's device",
-      "Designed and prototyped the application using Figma and Canva",
-      "Implemented the application through Flutter (Dart) and Android Studio including UI/UX, back-end, user authentication, and other applicable features",
-      "Architected security aspects of multi-tenancy and privacy of medical data on the app",
+      "Led cross-functional technology decisions and drove a migration from a legacy framework to a modern stack to reduce technical debt and accelerate delivery",
+      "Advocated for higher short-term migration costs based on long-term engineering benefits, establishing a scalable foundation projected to reduce future feature effort by 40%+",
     ],
   },
   {
@@ -90,9 +110,8 @@ const experiences = [
       "Designed Docker solutions for secure cloud infrastructure assessment and automated compliance monitoring.",
     technologies: ["Docker", "AWS", "Steampipe", "SQL", "DevOps"],
     details: [
-      "Evaluated open-source security and DevOps pipeline tools to strengthen internal cloud workflows",
-      "Developed a Docker-based integration with Steampipe to query client AWS resources using SQL",
-      "Improved infrastructure visibility by enabling faster auditing of cloud configurations and compliance checks",
+      "Designed Docker-based infrastructure for secure cloud assessments and automated compliance monitoring across client environments",
+      "Built integration with Steampipe and AWS resource queries to improve infrastructure visibility and accelerate auditing workflows",
     ],
   },
   {
@@ -112,12 +131,9 @@ const experiences = [
       "Project Management",
     ],
     details: [
-      "Managed a team of web developers to make modifications and add features to the existing website",
-      "Coordinated website restructuring and UI/UX improvements across multiple pages and features",
-      "Conducted code reviews and ensured adherence to coding standards and best practices",
-      "Planned and prioritized development tasks, working with stakeholders to define project requirements",
-      "Oversaw testing and deployment processes to ensure quality and stability of releases",
-      "Mentored junior developers and facilitated knowledge sharing within the team",
+      "Managed a team of developers to redesign and improve the company website, aligning UI/UX with business goals and deployment quality standards",
+      "Coordinated cross-functional work, code reviews, and release planning to increase maintainability and accelerate feature delivery",
+      "Mentored junior developers and helped prioritize roadmap decisions, improving team velocity and delivery consistency",
     ],
   },
 ];
@@ -126,6 +142,7 @@ export default function ExperienceSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<Array<HTMLElement | null>>([]);
+  const activeIndexRef = useRef(0);
 
   const totalExperiences = experiences.length;
 
@@ -161,7 +178,20 @@ export default function ExperienceSection() {
   };
 
   useEffect(() => {
-    scrollToIndex(activeIndex, "auto");
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    const target = cardRefs.current[0];
+
+    if (!carousel || !target) {
+      return;
+    }
+
+    const targetLeft =
+      target.offsetLeft - (carousel.clientWidth - target.clientWidth) / 2;
+    carousel.scrollLeft = targetLeft;
   }, []);
 
   useEffect(() => {
@@ -174,7 +204,7 @@ export default function ExperienceSection() {
 
     const syncActiveIndexFromScroll = () => {
       const viewportCenter = carousel.scrollLeft + carousel.clientWidth / 2;
-      let nearestIndex = activeIndex;
+      let nearestIndex = activeIndexRef.current;
       let nearestDistance = Number.POSITIVE_INFINITY;
 
       cardRefs.current.forEach((card, index) => {
@@ -190,7 +220,8 @@ export default function ExperienceSection() {
         }
       });
 
-      if (nearestIndex !== activeIndex) {
+      if (nearestIndex !== activeIndexRef.current) {
+        activeIndexRef.current = nearestIndex;
         setActiveIndex(nearestIndex);
       }
     };
@@ -209,7 +240,7 @@ export default function ExperienceSection() {
       }
       carousel.removeEventListener("scroll", onScroll);
     };
-  }, [activeIndex]);
+  }, []);
 
   return (
     <section

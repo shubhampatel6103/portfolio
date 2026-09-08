@@ -1,7 +1,6 @@
 import Header from "@/components/header";
 import HeroSection from "@/components/heroSection";
 import EducationSection from "@/components/educationSection";
-import AboutSection from "@/components/aboutSection";
 import ExperienceSection from "@/components/experienceSection";
 import ProjectsSection from "@/components/projectsSection";
 import ScrollToTop from "@/components/scrollToTop";

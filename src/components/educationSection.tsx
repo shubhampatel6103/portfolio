@@ -20,7 +20,7 @@ const education = [
     period: "2022 — 2027",
     details: [
       "GPA: 3.9/4.0",
-      "Part of the Laurier Student Investment Fund (LSIF) where I analyze and manage a portfolio of stocks",
+      "Part of the Laurier Student Investment Fund (LSIF) where I analyzed and managed a portfolio of stocks",
       "Relevant Courses: Finance basics, Equity analysis, Derivatives markets",
     ],
   },
@@ -29,7 +29,7 @@ const education = [
 const awards = [
   {
     name: "President's Gold Scholarship",
-    year: "2022 — 2025",
+    year: "2022 — 2026",
     description:
       "Wilfrid Laurier University - Cumulative GPA 10.5+ and 95%+ high school average",
   },
